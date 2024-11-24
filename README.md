@@ -1,6 +1,7 @@
 # logc
 A Mitre based log analysis tool for linux systems.
 
+This tool contain 2 scripts for collecting  logs and analysing log based on mitre attacks.
 
 
 # main log structure 
