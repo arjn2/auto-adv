@@ -3,7 +3,7 @@ A Mitre based log analysis tool for linux systems.
 
 
 
-#main log structure 
+# main log structure 
 /var/log/caldera_attacks/YYYYMMDD_HHMMSS/
 auth_initial.log
 syslog_initial.log
