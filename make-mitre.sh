@@ -47,6 +47,11 @@ print_status "Cloning Caldera repository..."
 git clone https://github.com/mitre/caldera.git
 cd caldera
 
+# Initialize and update submodules
+print_status "Initializing submodules..."
+git submodule update --init --recursive
+
+
 # Create and activate virtual environment
 print_status "Setting up Python virtual environment..."
 python3 -m venv venv
@@ -111,7 +116,7 @@ chmod +x "$INSTALL_DIR/stop_caldera.sh"
 
 # Create service file
 print_status "Creating systemd service..."
-cat > /etc/systemd/system/caldera.service << EOL
+sudo cat > /etc/systemd/system/caldera.service << EOL
 [Unit]
 Description=MITRE Caldera
 After=network.target
