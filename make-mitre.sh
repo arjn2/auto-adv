@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Save as install_caldera.sh
-
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -16,6 +15,8 @@ print_error() {
     echo -e "${RED}[!] $1${NC}"
 }
 
+
+apt remove node -y
 # Check if script is run as root
 #if [ "$EUID" -ne 0 ]; then 
 #    print_error "Please run as root"
@@ -30,14 +31,14 @@ cd "$INSTALL_DIR"
 # Install system dependencies
 print_status "Installing system dependencies..."
 sudo apt update
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+
 sudo apt install -y \
     python3 \
     python3-pip \
     python3-venv \
     git \
     golang \
-    nodejs \
-    npm \
     curl \
     wget \
     build-essential
