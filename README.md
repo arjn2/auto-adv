@@ -34,7 +34,7 @@ collector.log
 ```
 
 # Usage
-```
+
 use logc for .log genertaions
-Use clogc for create csv of logs.
-```
+Use clogcsv for create csv of logs.
+
