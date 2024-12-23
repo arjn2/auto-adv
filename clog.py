@@ -22,28 +22,64 @@ class SignatureLoader:
     def load_signatures():
         try:
             script_dir = os.path.dirname(os.path.abspath(__file__))
-            signature_path = os.path.join(script_dir, 'signature.json')
+            signature_path = os.path.join(script_dir, 'signatures.json')
 
             with open(signature_path, 'r') as f:
                 signatures = json.load(f)
 
-            # Flatten indicators for easier searching
+            # Extract whitelisted services
+            whitelisted_services = set(signatures.get('whitelisted_services', []))
+
+            # Flatten all technique signatures for easier searching
             flattened_indicators = {}
-            for category in signatures['indicators']:
-                flattened_indicators.update(signatures['indicators'][category])
+            techniques = signatures.get('techniques', {})
+
+            for tactic, technique_group in techniques.items():
+                for technique_id, technique_info in technique_group.items():
+                    if isinstance(technique_info, dict) and 'signatures' in technique_info:
+                        for pattern, description in technique_info['signatures'].items():
+                            # Include MITRE ID and tactic in description
+                            full_description = f"{description} [{tactic.upper()} - {technique_id}]"
+                            flattened_indicators[pattern] = full_description
+
+                    # Special handling for Caldera-specific patterns
+                    if tactic == 'caldera_specific' and isinstance(technique_info, dict):
+                        for pattern, description in technique_info.get('signatures', {}).items():
+                            flattened_indicators[pattern] = f"{description} [CALDERA]"
+
+            # Extract process monitoring patterns
+            discovery_processes = set()
+            if 'caldera_specific' in techniques:
+                process_checks = techniques['caldera_specific'].get('process_checks', {})
+                if 'signatures' in process_checks:
+                    discovery_processes = {key.split('grep')[-1].strip()
+                                           for key in process_checks['signatures'].keys()
+                                           if 'grep' in key}
+
+            # Add critical file monitoring
+            file_monitoring = signatures.get('file_monitoring', {})
+            critical_files = set(file_monitoring.get('critical_files', []))
+            critical_dirs = set(file_monitoring.get('critical_directories', []))
 
             return {
-                'discovery_processes': set(signatures['discovery_processes']),
-                'whitelisted_services': set(signatures['whitelisted_services']),
-                'indicators': flattened_indicators
+                'discovery_processes': discovery_processes,
+                'whitelisted_services': whitelisted_services,
+                'indicators': flattened_indicators,
+                'critical_files': critical_files,
+                'critical_directories': critical_dirs,
+                'metadata': signatures.get('metadata', {})
             }
+
         except Exception as e:
             logging.error(f"Error loading signatures.json: {str(e)}")
             logging.error("Using default empty signatures")
             return {
                 'discovery_processes': set(),
                 'whitelisted_services': set(),
-                'indicators': {}
+                'indicators': {},
+                'critical_files': set(),
+                'critical_directories': set(),
+                'metadata': {}
             }
 
 class LogFileHandler(FileSystemEventHandler):
@@ -57,6 +93,8 @@ class LogFileHandler(FileSystemEventHandler):
         self.discovery_processes = signatures['discovery_processes']
         self.whitelisted_services = signatures['whitelisted_services']
         self.indicators = signatures['indicators']
+        self.critical_files = signatures['critical_files']
+        self.critical_dirs = signatures['critical_directories']
 
     def is_whitelisted_service(self, log_line):
         return any(service.lower() in log_line.lower()
