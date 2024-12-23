@@ -1,0 +1,6 @@
+watchdog
+python-dotenv
+psutil
+watchdog
+tqdm
+keyboard
