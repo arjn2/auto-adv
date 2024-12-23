@@ -6,3 +6,6 @@ tqdm
 keyboard
 gitpython
 pyyaml
+
+psutil 
+systemd-python
