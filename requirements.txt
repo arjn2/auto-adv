@@ -4,3 +4,5 @@ psutil
 watchdog
 tqdm
 keyboard
+gitpython
+pyyaml
