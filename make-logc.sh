@@ -12,9 +12,9 @@ python3 -m venv venv
 source ./venv/bin/activate
 
 # Install required Python packages
-pip install watchdog
-pip install python-dotenv
-pip install psutil
+
+pip install -r requirements.txt 
+
 
 # Create log directories
 mkdir -p logs
