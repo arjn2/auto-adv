@@ -22,7 +22,7 @@ class SignatureLoader:
     def load_signatures():
         try:
             script_dir = os.path.dirname(os.path.abspath(__file__))
-            signature_path = os.path.join(script_dir, 'signatures.json')
+            signature_path = os.path.join(script_dir, 'signature.json')
 
             with open(signature_path, 'r') as f:
                 signatures = json.load(f)
