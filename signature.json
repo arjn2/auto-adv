@@ -1,0 +1,73 @@
+{
+    "discovery_processes": [
+        "systemd-coredump",
+        "systemd-timesync",
+        "tcpdump",
+        "pulse",
+        "saned",
+        "colord",
+        "systemd",
+        "dbus",
+        "NetworkManager"
+    ],
+    "whitelisted_services": [
+        "NetworkManager",
+        "systemd-logind",
+        "dbus",
+        "cron",
+        "CRON",
+        "anacron",
+        "systemd",
+        "nm-dispatcher"
+    ],
+    "indicators": {
+        "system_info": {
+            "whoami": "User Identity Check",
+            "id ": "User ID Enumeration",
+            "groups": "Group Membership Check",
+            "uname -a": "System Info Gathering"
+        },
+        "process_discovery": {
+            "ps aux.*grep": "Process Discovery",
+            "ps -ef": "Process Listing",
+            "pgrep": "Process Search",
+            "top -n": "Process Monitoring"
+        },
+        "service_discovery": {
+            "systemctl list": "Service Enumeration",
+            "service --status-all": "Service Status Check",
+            "netstat": "Network Connection Check"
+        },
+        "file_system": {
+            "ls -la /etc": "System Config Enumeration",
+            "ls -la /var": "Variable Data Enumeration",
+            "find / -type": "File Search"
+        },
+        "network_discovery": {
+            "ifconfig": "Network Interface Check",
+            "ip a": "IP Configuration Check",
+            "route": "Route Table Check",
+            "arp -a": "ARP Cache Check"
+        },
+        "user_discovery": {
+            "cat /etc/passwd": "Password File Reading",
+            "getent passwd": "User Enumeration",
+            "lastlog": "Login History Check",
+            "w ": "Active User Check"
+        },
+        "system_config": {
+            "cat /proc/version": "Kernel Version Check",
+            "cat /etc/issue": "OS Version Check",
+            "lsmod": "Kernel Module Check",
+            "dmidecode": "Hardware Info Check"
+        },
+        "caldera_specific": {
+            "grep.*systemd-coredump": "Coredump Process Check",
+            "grep.*systemd-timesync": "Timesync Process Check",
+            "grep.*tcpdump": "Tcpdump Process Check",
+            "grep.*pulse": "Pulse Process Check",
+            "grep.*saned": "Scanner Process Check",
+            "grep.*colord": "Color Management Check"
+        }
+    }
+}
