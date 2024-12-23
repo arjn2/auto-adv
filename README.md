@@ -33,7 +33,7 @@ collector.log
 [updated log files with timestamps]
 ```
 
-#Usage
+# Usage
 ```
 use logc for .log genertaions
 Use clogc for create csv of logs.
