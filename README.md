@@ -16,11 +16,7 @@ Easy dataset preparation for cve with logs.
 This tool contain 2 scripts for collecting  logs and analysing log based on mitre attacks.
 run make-logc.sh for virtual environment creation.
 ```
-# mitre
-```
-Also added a quick installation script for mitre also.
-run make-mitre.sh
-```
+
 
 
 
