@@ -1,6 +1,6 @@
 # logcc
 ```
-A LOG ANALYSIS TOLL FOR LINUX
+A LOG ANALYSIS TOOL FOR LINUX
 
 It is a command log correlation analyzer,
 combining different tools such as auditd for tracking command executions,
