@@ -5,6 +5,15 @@ from datetime import datetime
 import csv
 from collections import defaultdict
 
+import re
+import Levenshtein
+from bcc import BPF
+import ctypes as ct
+import os
+import sys
+import logging
+
+
 class LogCorrelationNN:
     def __init__(self):
         self.input_layer = {
@@ -61,8 +70,8 @@ class LogCorrelationNN:
 
 # part 2 kernel event tracing integration
 
-from bcc import BPF
-import ctypes as ct
+#from bcc import BPF
+#import ctypes as ct
 
 class KernelEventTracer:
     def __init__(self):
