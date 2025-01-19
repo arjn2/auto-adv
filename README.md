@@ -1,11 +1,21 @@
-# logc
+# logcc
 ```
-A Mitre based log analysis tool for linux systems.
+A LOG ANALYSIS TOLL FOR LINUX
 
+It is a command log correlation analyzer,
+combining different tools such as auditd for tracking command executions,
+ebpf bcc lttng -> for system level log correlation.
+LogMine for log correlation with pattern matching.
+
+Easy dataset preparation for cve with logs.
+
+
+```
+# IDS
+```
 This tool contain 2 scripts for collecting  logs and analysing log based on mitre attacks.
 run make-logc.sh for virtual environment creation.
 ```
-
 # mitre
 ```
 Also added a quick installation script for mitre also.
