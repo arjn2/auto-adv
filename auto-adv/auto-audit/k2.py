@@ -224,9 +224,9 @@ class ProcessMonitor:
         except Exception as e:
             logger.error(f"Error collecting info for PID {pid}: {e}")
             return None
-
+"""
     def get_process_logs(self, pid, process_info=None):
-        """Get logs related to the process from various sources"""
+     
         logs = defaultdict(list)
         
         # If process_info is provided, use it
@@ -290,6 +290,52 @@ class ProcessMonitor:
             logger.warning(f"Failed to get dmesg logs: {e}")
         
         return dict(logs)
+
+"""
+
+def get_process_logs(self, pid, process_info=None):
+    """Get logs from both journald and auditd"""
+    logs = defaultdict(list)
+    
+    # 1. Get journald logs (faster, handles short-lived processes)
+    try:
+        journal_cmd = f"journalctl _PID={pid} --since '5 minutes ago' -o json"
+        output = subprocess.check_output(journal_cmd, shell=True, text=True)
+        for line in output.splitlines():
+            try:
+                entry = json.loads(line)
+                logs['journal'].append({
+                    'timestamp': entry.get('__REALTIME_TIMESTAMP'),
+                    'message': entry.get('MESSAGE'),
+                    'transport': entry.get('_TRANSPORT')
+                })
+            except json.JSONDecodeError:
+                pass
+    except subprocess.CalledProcessError:
+        pass
+
+    # 2. Get traditional audit logs (structured data)
+    try:
+        audit_cmd = f"ausearch -p {pid} -i"
+        output = subprocess.check_output(audit_cmd, shell=True, text=True)
+        logs['audit'] = output.splitlines()
+    except subprocess.CalledProcessError:
+        pass
+
+    # 3. Special handling for kernel processes
+    if 'kworker' in process_info.get('name', ''):
+        try:
+            dmesg_output = subprocess.check_output(
+                "dmesg | grep -i 'kernel'", 
+                shell=True, text=True
+            )
+            logs['kernel'] = dmesg_output.splitlines()
+        except subprocess.CalledProcessError:
+            pass
+
+    return dict(logs)
+
+
 
     def analyze_pid(self, pid):
         """Analyze a single PID and return a structured report"""
